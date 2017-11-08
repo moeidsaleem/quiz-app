@@ -33,6 +33,7 @@ export class QuizcategoryPage {
     }
   
     goQuizes(x){
+     
       this.navCtrl.push('QuizesPage', {sub:x,category:this.category});
     }
   

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AdMobFree, AdMobFreeBannerConfig ,AdMobFreeInterstitialConfig} from '@ionic-native/admob-free';
-
+//quiz main page
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
@@ -72,7 +72,7 @@ export class AboutPage {
     goQuiz(x){
       console.log(x);
       //go to Learn Page
-      this.navCtrl.push('QuizcategoryPage',{category:x});
+       this.navCtrl.push('QuizcategoryPage',{category:x});
     }
   
   }

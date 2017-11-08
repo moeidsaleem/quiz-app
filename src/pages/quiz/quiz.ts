@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+
+import { Component ,ViewChild} from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFree } from '@ionic-native/admob-free';
+import {  Data } from '../../providers/data/data';
 
 /**
  * Generated class for the QuizPage page.
@@ -17,61 +19,91 @@ import { AdMobFreeBannerConfig, AdMobFreeInterstitialConfig, AdMobFree } from '@
   templateUrl: 'quiz.html',
 })
 export class QuizPage {
-  bioLink:any;
-	bio={
-    q:'',
-    options:{}
-  }
-  count=0;
-child_id;
-category;
-sub;
-article;
-data;
-questions;
-  constructor(private fb:AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams,private formBuilder:FormBuilder
+  
+	@ViewChild('slides') slides: any;
+  
+    hasAnswered: boolean = false;
+    score: number = 0;
+    slideOptions: any;
+    questions: any;
+
+
+  constructor(public dataService:Data,private fb:AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams,private formBuilder:FormBuilder
   ,private adMob:AdMobFree) 
   {
-    this.article = this.navParams.get('article');  
-    this.category=this.navParams.get('category');
-    this.sub=this.navParams.get('sub');
-   console.log(this.article);
-   this.bioLink =this.fb.list('quizes/'+this.category+'/'+this.sub+'/'+this.article);
-   this.bioLink.valueChanges().subscribe(res=>{
-   this.data = res; 
-   console.log(this.data);
+  
+  
+}
+ionViewDidLoad() {
+  // this.dataService.category='cooking';
+  // this.dataService.sub='italian';
+  
+  // this.dataService.quiz='quiz2';
+  
+  this.slides.lockSwipes(true);
 
+  this.dataService.load().then((data) => {
 
-//converting object to an array
+    data.map((question) => {
 
+          let originalOrder = question.answers;
+          question.answers = this.randomizeAnswers(originalOrder);
+          return question;
 
+      });		
 
+      this.questions = data;
 
+  });
 
-  })     
-    //console.log(this.bio.name);
-    ///// this.bio.dob = this.navParams.get('dob');
+}
+
+nextSlide(){
+  this.slides.lockSwipes(false);
+  this.slides.slideNext();
+  this.slides.lockSwipes(true);
+}
+
+selectAnswer(answer, question){
+
+  this.hasAnswered = true;
+  answer.selected = true;
+  question.flashCardFlipped = true;
+
+  if(answer.correct){
+    this.score++;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BioPage');
+  setTimeout(() => {
+    this.hasAnswered = false;
+    this.nextSlide();
+    answer.selected = false;
+    question.flashCardFlipped = false;
+  }, 3000);
+}
+
+randomizeAnswers(rawAnswers: any[]): any[] {
+
+  for (let i = rawAnswers.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let temp = rawAnswers[i];
+      rawAnswers[i] = rawAnswers[j];
+      rawAnswers[j] = temp;
   }
+
+  return rawAnswers;
+
+}
+
+restartQuiz() {
+  this.score = 0;
+  this.slides.lockSwipes(false);
+  this.slides.slideTo(1, 1000);
+  this.slides.lockSwipes(true);
+}
+
   backButton(){
   	this.navCtrl.pop();
-  }
-  saveBio(val){
-    let req ={
-         quiz:this.article,
-         answers:val
-    }
-    console.log(req);
-     let link=this.fb.list('answers');
-     link.push(req).then(resp=>{
-     console.log(resp);
-     console.log('updated');
-     this.navCtrl.pop();
-   })
- // console.log(val);
   }
 
 

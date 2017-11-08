@@ -17,7 +17,10 @@ import { AdMobFree } from '@ionic-native/admob-free';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import {  Data } from '../providers/data/data';
+import { HttpModule } from '@angular/http';
 // import { LearnCategoryPage } from '../pages/learn-category/learn-category';
+// import { FlashCardComponent } from '../components/flash-card/flash-card';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDwO5hwKrrBvoTT3u5uDwSNAl8lclnzBh8",
@@ -34,7 +37,8 @@ export const firebaseConfig = {
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    //FlashCardComponent
     
   ],
   imports: [
@@ -43,6 +47,7 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    HttpModule
     
   ],
   bootstrap: [IonicApp],
@@ -57,7 +62,8 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     AdMobFree,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Data
   ]
 })
 export class AppModule {}

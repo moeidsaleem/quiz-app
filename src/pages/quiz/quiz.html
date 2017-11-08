@@ -7,33 +7,51 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>quiz</ion-title>
+    <ion-title>{{article}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
-  <form  #bioForm="ngForm"  *ngIf="data" (ngSubmit)="saveBio(bioForm.value)">
-    
-    
-      <ion-item  *ngFor="let x of data;let i = index">
-          <ion-label floating>{{x.q}} </ion-label>
-              <ion-select  name="{{i}}" ngModel  multiple="false" cancelText="Cancel" okText="Select" style="width:100%">
-              <ion-option value="{{y}}" *ngFor="let y of x.options">{{y}}</ion-option>
-           </ion-select> 
+<ion-content>
+  
+    <ion-slides #slides>
+  
+      <ion-slide class="start-slide">
+        <button ion-button color="primary" (click)="nextSlide()">Start!</button>
+      </ion-slide>
+  
+      <ion-slide *ngFor="let question of questions; let i = index;">
+  
+        <h3>Question {{i+1}}</h3>
+  
+        <flash-card [isFlipped]="question.flashCardFlipped">
+          <div class="flash-card-front" [innerHTML]="question.flashCardFront"></div>
+          <div class="flash-card-back" [innerHTML]="question.flashCardBack"></div>
+        </flash-card>
+  
+        <h3>{{question.questionText}}</h3>
+  
+        <ion-list no-lines radio-group>
+  
+          <ion-item *ngFor="let answer of question.answers; let i = index;">
+  
+            <ion-label>{{i+1}}. {{answer.answer}}</ion-label>
+            <ion-radio (click)="selectAnswer(answer, question)" [checked]="answer.selected" [disabled]="hasAnswered"></ion-radio>
+  
           </ion-item>
-    
-    <!-- <ion-item *ngIf="data">
-      <ion-label floating>{{data.question2.q}} </ion-label>
-          <ion-select  name="selected" ngModel  multiple="false" cancelText="Cancel" okText="Select" style="width:100%">
-          <ion-option value="{{y}}" *ngFor="let y of data.question2.options">{{y}}</ion-option>
-       </ion-select> 
-      </ion-item> -->
-
-
-      
-    <button ion-button right type="submit">Save</button>
-  </form>
-</ion-content>
+  
+        </ion-list>
+  
+      </ion-slide>
+  
+      <ion-slide>
+        <h2>Final Score: {{score}}</h2>
+  
+        <button (click)="restartQuiz()" ion-button full color="primary">Start Again</button>
+  
+      </ion-slide>
+  
+    </ion-slides>
+  
+  </ion-content>

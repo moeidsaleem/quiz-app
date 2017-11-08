@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { Data } from '../../providers/data/data';
 
 /**
  * Generated class for the QuizesPage page.
@@ -15,7 +16,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
   templateUrl: 'quizes.html',
 })
 export class QuizesPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams,private fb:AngularFireDatabase) {
+  constructor(public data:Data,public navCtrl: NavController, public navParams: NavParams,private fb:AngularFireDatabase) {
   }
 
   articles;
@@ -35,6 +36,9 @@ export class QuizesPage {
   }
 
   goArticle(x){
+    this.data.category = this.category;
+    this.data.sub =this.sub;
+    this.data.quiz =x;
     this.navCtrl.push('QuizPage',{sub:this.sub, category:this.category,article:x});
   }
 
