@@ -24,7 +24,7 @@
 			]
 		},
 		{
-			"flashCardFront": "<p> name that mobile  ? </p>",
+			"flashCardFront": "<p> name that S ? </p>",
 			"flashCardBack": "Truck",
 			"flashCardFlipped": false,
 			"questionText": "What is this?",
